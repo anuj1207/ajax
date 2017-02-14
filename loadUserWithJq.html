@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="screen" title="no title">
+  </head>
+  <script  src="https://code.jquery.com/jquery-3.1.1.min.js"  crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <body>
+    <div class="container" id="container">
+      <h1 style="text-align:center;">Getting Details from user</h1>
+      <br/>
+      <form class="form-horizontal" id=formToSerialize>
+        <div id = "form-group">
+        <label for="username">Username </label>
+        <input id="username" name="username" type="text"/>
+      </div>
+
+      <div id = "form-group">
+        <button id="get-data" type = "btn btn-primary">Get User</button>
+      </div>
+     </form>
+      <div class="col-sm-6">
+        <p id="user-name"></p>
+        <p id="company"></p>
+        <p id="email"></p>
+        <p id="createdAt"></p>
+        <p id="location"></p>
+        <p id="url"></p>
+      </div>
+      <div class="col-sm-6">
+        <img id="avatar" src="" alt=""/>
+      </div>
+    </div>
+    <script>
+      $(document).ajaxStart(function(){
+        $("#avatar").attr("src","progress.gif");
+      }).ajaxStop(function(){
+        console.log("Ajax Stopped.")
+      }).ajaxSuccess(function(){
+        console.log("Ajax Success")
+      }).ajaxComplete(function(){
+        console.log("Ajax Completed")
+      })
+
+      $("#get-data").on("click",function(){
+        var username = $("#username").val();
+        console.log(username);
+        $.ajax({
+          url:"https://api.github.com/users/"+username,
+          success: function(data){
+            console.log(data)
+            $("#avatar").attr("src",data.avatar_url);
+            $("#user-name").text("User id is : "+data.login);
+            $("#company").text("User id is : "+data.company);
+            $("#email").text("User id is : "+data.email);
+            $("#createdAt").text("User id is : "+data.created_at);
+            $("#location").text("User id is : "+data.location);
+            $("#url").text("User id is : "+data.url);
+          },
+          error: function(){
+            $("#avatar").attr("src","no-user.png");
+            $("#user-name").text("User not found");
+          }
+        })
+      })
+    </script>
+  </body>
+</html>
